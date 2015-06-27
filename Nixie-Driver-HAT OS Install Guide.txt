@@ -1,0 +1,68 @@
+flash minibian
+================================================================
+Resize HDD partition
+http://forum.odroid.com/viewtopic.php?f=52&t=2948&p=25139&hilit=live+resize#p25139
+========
+cd && apt-get -y install nano && nano resize.sh
+-
+#!/bin/bash
+
+fdisk_first() {
+		p2_start=`fdisk -l /dev/mmcblk0 | grep mmcblk0p2 | awk '{print $2}'`
+		echo "Found the start point of mmcblk0p2: $p2_start"
+		fdisk /dev/mmcblk0 << __EOF__ >> /dev/null
+d
+2
+n
+p
+2
+$p2_start
+
+p
+w
+__EOF__
+
+		sync
+		touch /root/.resize
+		echo "Ok, Partition resized, please reboot now"
+		echo "Once the reboot is completed please run this script again"
+}
+
+resize_fs() {
+	echo "Activating the new size"
+	resize2fs /dev/mmcblk0p2 >> /dev/null
+	echo "Done!"
+	echo "Enjoy your new space!"
+	rm -rf /root/.resize
+}
+
+
+if [ -f /root/.resize ]; then
+	resize_fs
+else
+	fdisk_first
+fi
+-
+chmod +x resize.sh && ./resize.sh && reboot
+...run a second time to complete...
+./resize.sh
+...check resize success...
+df -h
+================================================================
+Pi Updates
+https://github.com/Hexxeh/rpi-update/
+========
+#update software
+apt-get -y update && apt-get -y dist-upgrade apt-get -y autoremove
+#update firmware and reboot
+apt-get install rpi-update && rpi-update
+================================================================
+wiringPi
+https://projects.drogon.net/raspberry-pi/wiringpi/download-and-install/
+========
+#update
+apt-get -y update && apt-get -y upgrade
+#instal prerequisites
+apt-get -y install git-core sudo make gcc g++
+#install wiringPi
+cd && git clone git://git.drogon.net/wiringPi && cd wiringPi && ./build
