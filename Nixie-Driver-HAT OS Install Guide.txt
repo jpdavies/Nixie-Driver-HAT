@@ -1,6 +1,6 @@
 flash minibian
 ================================================================
-Resize HDD partition
+Resize partition
 http://forum.odroid.com/viewtopic.php?f=52&t=2948&p=25139&hilit=live+resize#p25139
 ========
 cd && apt-get -y install nano && nano resize.sh
