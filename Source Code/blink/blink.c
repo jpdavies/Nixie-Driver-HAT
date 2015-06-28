@@ -1,3 +1,10 @@
+/*
+Compile instructions:
+[e.g.]
+gcc -o binaryFile sourceFile1.c [sourceFile2.c sourceFileNNN.c]
+[actual]
+gcc -o blink blink.c
+*/
 #include <wiringPi.h>
 int main (void)
 {
